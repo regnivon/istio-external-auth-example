@@ -11,6 +11,7 @@ kubectl label ns test istio-injection=enabled
 2. edit the istio config to hook in the auth extension
 
 kubectl edit configmap istio -n istio-system
+```
 data:
   mesh: |-  
     # Add the following content to define the external authorizers.  
@@ -23,8 +24,8 @@ data:
       envoyExtAuthzHttp:  
         service: "ext-authz.foo.svc.cluster.local"  
         port: "8000"  
-        includeHeadersInCheck: ["x-ext-authz"]   
-        
+        includeHeadersInCheck: ["x-ext-authz"]        
+```
 
 3. apply resources (don't bother with deploy and service files if you don't want to test regular http routing with istio)
 
