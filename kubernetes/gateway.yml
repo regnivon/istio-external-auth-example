@@ -1,0 +1,63 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  namespace: test
+  name: regnivon-gateway
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - "*"
+    - port:
+        number: 50051
+        name: grpc
+        protocol: GRPC
+      hosts:
+        - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  namespace: test
+  name: regnivon
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - regnivon-gateway
+  http:
+    - match:
+        - uri:
+            exact: /stuff
+      route:
+        - destination:
+            host: regnivon
+            port:
+              number: 10000
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  namespace: test
+  name: server-grpc-service
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - test/regnivon-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /test.common.HelloService
+          port: 50051
+      route:
+        - destination:
+            host: server
+            port:
+              number: 50051
+

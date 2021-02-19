@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: test
+  name: regnivon-deployment
+  labels:
+    app: regnivon
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: regnivon
+  template:
+    metadata:
+      labels:
+        app:
+          regnivon
+    spec:
+      containers:
+        - name: regnivon
+          image: gcr.io/keeping-it-casual/test
+          ports:
+            - containerPort: 10000

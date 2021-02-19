@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package test.common;
+
+option go_package = "./protos;protos";
+
+message SayHelloRequest {
+  string hi = 1;
+}
+
+message SayHelloResponse {
+  bool successful = 1;
+}
+
+
+service HelloService {
+  rpc SayHello(SayHelloRequest) returns (SayHelloResponse);
+}
